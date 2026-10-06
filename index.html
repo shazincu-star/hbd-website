@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Happy Birthday Uppa 🎂</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#020205;color:#fff;font-family:Georgia,'Times New Roman',serif}
+body{user-select:none}
+#app{position:relative;width:100%;height:100%;overflow:hidden;background:#020205}
+.scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;opacity:0;visibility:hidden;transform:scale(1.03);transition:opacity 1.2s ease,transform 1.5s ease,visibility 1.2s;overflow:hidden}
+.scene.active{opacity:1;visibility:visible;transform:scale(1)}
+.scene::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(255,190,70,.10),transparent 42%),linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.55));pointer-events:none}
+#scene1{background:radial-gradient(circle at center,#17121d 0%,#050509 55%,#010102 100%)}
+#scene2{background:radial-gradient(circle at 50% 40%,#30200b 0%,#08060a 55%,#010102 100%)}
+#scene3{background:radial-gradient(circle at 50% 45%,#281010 0%,#080509 58%,#010102 100%)}
+#scene4{background:radial-gradient(circle at 50% 35%,#171529 0%,#06060b 62%,#010102 100%);padding:70px 24px 90px}
+#scene5{background:radial-gradient(circle at 50% 45%,#1d1825 0%,#08070d 60%,#010102 100%);padding:30px}
+#scene6{background:radial-gradient(circle at 50% 38%,#3a2109 0%,#10090a 45%,#020203 100%)}
+.content{position:relative;z-index:5;max-width:1100px;padding:24px}
+.kicker{font-size:clamp(14px,2vw,20px);letter-spacing:7px;text-transform:uppercase;color:#e8d8b1;opacity:.9;margin-bottom:22px}
+.intro{font-size:clamp(34px,6vw,82px);font-weight:400;letter-spacing:2px;line-height:1.05;color:#fff4d0;text-shadow:0 0 30px rgba(255,220,150,.35);animation:softIn 2.5s both}
+.gold{background:linear-gradient(90deg,#fff1b0,#d89b2b,#fff7c7,#d89b2b);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:goldMove 4s linear infinite}
+.uppa{font-family:Arial,sans-serif;font-weight:900;font-size:clamp(90px,20vw,260px);letter-spacing:.08em;line-height:.8;text-shadow:0 0 10px rgba(255,210,90,.6),0 0 45px rgba(255,170,20,.4);animation:heroPulse 2.6s ease-in-out infinite}
+.subtitle{font-size:clamp(18px,3vw,32px);letter-spacing:8px;margin-top:28px;color:#f7e7bd;text-transform:uppercase}
+.happy{font-family:Arial,sans-serif;font-size:clamp(52px,10vw,140px);font-weight:1000;letter-spacing:.03em;line-height:.9;text-transform:uppercase;background:linear-gradient(180deg,#fffbe0,#ffd65b 45%,#b96b0b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 24px rgba(255,186,50,.35));animation:reveal 1.6s cubic-bezier(.2,.8,.2,1) both}
+.upSmall{font-size:clamp(30px,6vw,76px);margin-top:25px;letter-spacing:.22em;color:#fff1bb;animation:softIn 2s .5s both}
+.start{margin-top:40px;border:1px solid rgba(255,220,130,.7);background:rgba(255,204,86,.08);color:#fff4cc;padding:15px 27px;border-radius:999px;font:600 15px Arial,sans-serif;letter-spacing:2px;cursor:pointer;box-shadow:0 0 30px rgba(255,190,50,.12);transition:.3s}
+.start:hover{transform:translateY(-3px);background:rgba(255,204,86,.17);box-shadow:0 0 45px rgba(255,190,50,.24)}
+.hint{font:13px Arial,sans-serif;color:#aaa;margin-top:14px}
+#particleCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+#fxCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.sweep{position:absolute;width:35%;height:180%;top:-40%;left:-45%;background:linear-gradient(90deg,transparent,rgba(255,220,120,.5),transparent);filter:blur(12px);transform:rotate(12deg);animation:sweep 3.4s 1s ease-out forwards;z-index:2}
+.balloons{position:absolute;inset:0;z-index:2;pointer-events:none}
+.balloon{position:absolute;width:75px;height:98px;border-radius:50% 50% 45% 45%;bottom:-150px;animation:floatUp 8s linear infinite;box-shadow:inset -12px -12px 25px rgba(0,0,0,.25),0 0 25px rgba(255,255,255,.08)}
+.balloon::after{content:"";position:absolute;width:1px;height:130px;background:rgba(255,255,255,.45);left:50%;top:96%}
+.b1{left:7%;background:#f2b544;animation-delay:.2s}.b2{left:21%;background:#d95063;animation-delay:2s}.b3{right:18%;background:#5e9be8;animation-delay:1.3s}.b4{right:6%;background:#f1cf5a;animation-delay:3s}.b5{left:45%;background:#9b70d1;animation-delay:4s}
+.photos{position:relative;z-index:5;display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;width:min(1100px,100%);margin-top:20px}
+.photo-card{width:min(30vw,300px);min-width:220px;aspect-ratio:4/5;background:#111;border:1px solid rgba(255,224,150,.4);padding:9px;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 30px rgba(255,190,80,.08);opacity:0;animation:cardIn .9s forwards;overflow:hidden}
+.photo-card:nth-child(1){transform:rotate(-4deg);animation-delay:.2s}.photo-card:nth-child(2){transform:rotate(2deg);animation-delay:.5s}.photo-card:nth-child(3){transform:rotate(4deg);animation-delay:.8s}
+.photo-card:hover{transform:translateY(-10px) rotate(0deg) scale(1.04);transition:.35s}
+.photo-card img{width:100%;height:calc(100% - 43px);object-fit:cover;border-radius:9px;display:block;background:#222}
+.caption{height:43px;display:flex;align-items:center;justify-content:center;font-size:14px;letter-spacing:1px;color:#f5dfaa}
+.memTitle{position:relative;z-index:5;font-size:clamp(30px,5vw,62px);margin-bottom:10px;color:#fff4cc}
+.memSub{position:relative;z-index:5;font:14px Arial,sans-serif;color:#aaa;letter-spacing:3px;text-transform:uppercase}
+.message{position:relative;z-index:5;max-width:900px}
+.message .line{display:block;font-size:clamp(25px,4vw,48px);line-height:1.45;color:#f9edce;opacity:0;transform:translateY(22px);animation:lineIn 1s forwards}
+.message .line:nth-child(1){animation-delay:.4s}.message .line:nth-child(2){animation-delay:1.5s}.message .line:nth-child(3){animation-delay:2.6s}.message .line:nth-child(4){animation-delay:3.7s}.message .line:nth-child(5){animation-delay:4.8s}
+.signature{margin-top:38px;font-size:clamp(20px,3vw,30px);color:#dcae47;letter-spacing:3px;opacity:0;animation:softIn 2s 5.7s forwards}
+.cakeWrap{position:relative;z-index:5;margin-top:30px;animation:cakeFloat 3s ease-in-out infinite}
+.cake{position:relative;width:min(380px,70vw);height:210px}
+.layer{position:absolute;left:5%;width:90%;border-radius:18px 18px 12px 12px;box-shadow:inset 0 -16px 0 rgba(0,0,0,.12),0 18px 35px rgba(0,0,0,.35)}
+.bottom{height:80px;bottom:0;background:linear-gradient(#8d431e,#5a2415)}
+.middle{height:72px;bottom:55px;background:linear-gradient(#d96b45,#a83b26)}
+.top{height:68px;bottom:106px;background:linear-gradient(#f0a064,#c85d37)}
+.cream{position:absolute;left:5%;width:90%;height:18px;bottom:163px;background:#fff2c6;border-radius:20px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.candle{position:absolute;bottom:165px;width:13px;height:55px;background:linear-gradient(90deg,#fff0a6,#f5b83c,#fff4bd);border-radius:4px;z-index:3}
+.candle:nth-child(1){left:32%}.candle:nth-child(2){left:48%}.candle:nth-child(3){left:64%}
+.flame{position:absolute;left:50%;top:-25px;width:15px;height:23px;transform:translateX(-50%) rotate(45deg);background:#ffd35c;border-radius:80% 0 80% 80%;box-shadow:0 0 25px #ffb000;animation:flicker .18s infinite alternate}
+.finalTitle{position:relative;z-index:5;margin-top:20px;font-family:Arial,sans-serif;font-weight:900;font-size:clamp(42px,8vw,105px);letter-spacing:.02em;background:linear-gradient(180deg,#fff8d6,#ffc846,#c56c0b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 28px rgba(255,180,40,.3));animation:finalPop 1.5s both}
+.finalSub{position:relative;z-index:5;margin-top:15px;color:#ffe9a8;font-size:clamp(18px,3vw,28px);letter-spacing:6px;animation:softIn 2s 1s both}
+.controls{position:fixed;right:18px;bottom:18px;z-index:20;display:flex;gap:8px}
+.controls button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.45);color:#fff;font-size:17px;cursor:pointer;backdrop-filter:blur(8px)}
+.controls button:hover{background:rgba(255,255,255,.12)}
+.progress{position:fixed;left:0;top:0;height:2px;background:linear-gradient(90deg,#d8952d,#fff0a5);z-index:30;width:0%;box-shadow:0 0 12px rgba(255,200,90,.8)}
+@keyframes softIn{from{opacity:0;transform:translateY(20px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes reveal{from{opacity:0;transform:scale(.7) translateY(40px);filter:blur(12px)}to{opacity:1;transform:scale(1);filter:none}}
+@keyframes heroPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes goldMove{to{background-position:250% center}}
+@keyframes sweep{to{left:120%}}
+@keyframes floatUp{0%{transform:translateY(0) rotate(-4deg);opacity:0}10%{opacity:.9}100%{transform:translateY(-125vh) rotate(12deg);opacity:0}}
+@keyframes cardIn{from{opacity:0;transform:translateY(70px) scale(.8) rotate(0)}to{opacity:1}}
+@keyframes lineIn{to{opacity:1;transform:none}}
+@keyframes cakeFloat{50%{transform:translateY(-8px)}}
+@keyframes flicker{from{transform:translateX(-50%) rotate(42deg) scale(.9)}to{transform:translateX(-50%) rotate(48deg) scale(1.1)}}
+@keyframes finalPop{from{opacity:0;transform:scale(.65);filter:blur(12px)}to{opacity:1;transform:scale(1);filter:drop-shadow(0 0 28px rgba(255,180,40,.3))}}
+@media(max-width:700px){.photo-card{width:27vw;min-width:100px;padding:5px;border-radius:9px}.photo-card img{height:calc(100% - 32px)}.caption{font-size:9px;height:32px}.photos{gap:7px}.scene4{padding:50px 8px 70px}.message .line{font-size:24px}.balloon{width:50px;height:70px}.subtitle{letter-spacing:4px}}
+</style>
+</head>
+<body>
+<div id="app">
+<canvas id="particleCanvas"></canvas>
+<canvas id="fxCanvas"></canvas>
+<div class="progress" id="progress"></div>
+
+<section class="scene active" id="scene1">
+  <div class="content">
+    <div class="kicker">A little surprise for you</div>
+    <div class="intro">A very special day<span class="gold">…</span></div>
+    <button class="start" id="startBtn">START THE SURPRISE 🎁</button>
+    <div class="hint">Tap once to begin the music and animation</div>
+  </div>
+</section>
+
+<section class="scene" id="scene2">
+  <div class="sweep"></div>
+  <div class="balloons"><i class="balloon b1"></i><i class="balloon b2"></i><i class="balloon b3"></i><i class="balloon b4"></i><i class="balloon b5"></i></div>
+  <div class="content">
+    <div class="kicker">Today we celebrate</div>
+    <div class="uppa gold">UPPA</div>
+    <div class="subtitle">Someone truly special</div>
+  </div>
+</section>
+
+<section class="scene" id="scene3">
+  <div class="content">
+    <div class="happy">Happy<br>Birthday</div>
+    <div class="upSmall">UPPA</div>
+  </div>
+</section>
+
+<section class="scene" id="scene4">
+  <div class="memTitle">Our Beautiful Memories</div>
+  <div class="memSub">Three moments • one wonderful family</div>
+  <div class="photos">
+    <div class="photo-card"><img src="uppa1.jpg" alt="Uppa memory 1"><div class="caption">A beautiful moment</div></div>
+    <div class="photo-card"><img src="uppa2.jpg" alt="Uppa memory 2"><div class="caption">Together is special</div></div>
+    <div class="photo-card"><img src="uppa3.jpg" alt="Uppa memory 3"><div class="caption">Our favourite memories</div></div>
+  </div>
+</section>
+
+<section class="scene" id="scene5">
+  <div class="message">
+    <span class="line">Thank you for every smile.</span>
+    <span class="line">Thank you for every moment.</span>
+    <span class="line">You make our family stronger.</span>
+    <span class="line">May your days be filled with happiness.</span>
+    <span class="line">And may every new year bring beautiful memories.</span>
+    <div class="signature">With lots of love — Happy Birthday, Uppa ❤️</div>
+  </div>
+</section>
+
+<section class="scene" id="scene6">
+  <div class="cakeWrap">
+    <div class="cake">
+      <div class="candle"><i class="flame"></i></div>
+      <div class="candle"><i class="flame"></i></div>
+      <div class="candle"><i class="flame"></i></div>
+      <div class="cream"></div>
+      <div class="layer top"></div>
+      <div class="layer middle"></div>
+      <div class="layer bottom"></div>
+    </div>
+  </div>
+  <div class="finalTitle">HAPPY BIRTHDAY, UPPA!</div>
+  <div class="finalSub">Today is all about you ✨</div>
+</section>
+
+<div class="controls">
+  <button id="pauseBtn" title="Pause">Ⅱ</button>
+  <button id="muteBtn" title="Mute">🔊</button>
+</div>
+</div>
+
+<audio id="birthdayMusic" preload="auto">
+  <source src="birthday.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const scenes=[...document.querySelectorAll('.scene')];
+const durations=[5000,5500,6500,8500,9000];
+const music=document.getElementById('birthdayMusic');
+const progress=document.getElementById('progress');
+let current=0,timer=null,paused=false,started=false,muted=false,finalStarted=false;
+let particles=[], fireworks=[];
+
+function resizeCanvas(c){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';}
+const pc=document.getElementById('particleCanvas'),fc=document.getElementById('fxCanvas');
+const pctx=pc.getContext('2d'),fctx=fc.getContext('2d');
+function resize(){resizeCanvas(pc);resizeCanvas(fc);}
+addEventListener('resize',resize); resize();
+
+for(let i=0;i<220;i++) particles.push({x:Math.random(),y:Math.random(),r:Math.random()*1.7+.2,a:Math.random()*.8+.15,s:Math.random()*.00035+.00005});
+function particleLoop(){
+  pctx.clearRect(0,0,pc.width,pc.height);
+  const w=pc.width,h=pc.height,d=devicePixelRatio;
+  particles.forEach(p=>{p.y-=p.s;if(p.y<0)p.y=1;pctx.beginPath();pctx.arc(p.x*w,p.y*h,p.r*d,0,Math.PI*2);pctx.fillStyle='rgba(255,230,170,'+p.a+')';pctx.fill()});
+  requestAnimationFrame(particleLoop);
+}
+particleLoop();
+
+function burst(x,y){
+  for(let i=0;i<70;i++){const a=Math.random()*Math.PI*2,sp=2+Math.random()*6;fireworks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1,r:1+Math.random()*2})}
+}
+function fxLoop(){
+  fctx.clearRect(0,0,fc.width,fc.height);
+  const d=devicePixelRatio;
+  fireworks.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.055;q.life-=.014;fctx.beginPath();fctx.arc(q.x,q.y,q.r*d,0,Math.PI*2);fctx.fillStyle='rgba(255,210,100,'+Math.max(0,q.life)+')';fctx.fill()});
+  fireworks=fireworks.filter(q=>q.life>0);
+  requestAnimationFrame(fxLoop);
+}
+fxLoop();
+function startFireworks(){burst(innerWidth*.25,innerHeight*.25);setTimeout(()=>burst(innerWidth*.75,innerHeight*.3),500);setTimeout(()=>burst(innerWidth*.5,innerHeight*.2),1000);}
+
+function showScene(i){
+  scenes.forEach((s,n)=>s.classList.toggle('active',n===i));
+  current=i;
+  progress.style.width=((i)/(scenes.length-1))*100+'%';
+  if(i===2) startFireworks();
+  if(i===5 && !finalStarted){finalStarted=true;startFinal();}
+}
+function startFinal(){
+  if(!muted){music.currentTime=0;music.volume=.9;music.play().catch(()=>{});}
+  const repeat=setInterval(()=>{if(current===5&&!paused){burst(Math.random()*innerWidth,innerHeight*(.15+Math.random()*.35))}else if(current!==5)clearInterval(repeat)},1800);
+}
+function nextScene(){if(current<5){showScene(current+1);if(current<5){timer=setTimeout(nextScene,durations[current])}}}
+function begin(){
+  if(started)return; started=true;
+  music.load();
+  showScene(0);
+  timer=setTimeout(nextScene,durations[0]);
+}
+document.getElementById('startBtn').addEventListener('click',begin);
+
+document.getElementById('pauseBtn').addEventListener('click',()=>{
+  if(!started)return;
+  paused=!paused;
+  document.getElementById('pauseBtn').textContent=paused?'▶':'Ⅱ';
+  if(paused){clearTimeout(timer);if(!music.paused)music.pause();}
+  else{if(current===5&&!muted)music.play().catch(()=>{});if(current<5)timer=setTimeout(nextScene,durations[current]);}
+});
+
+document.getElementById('muteBtn').addEventListener('click',()=>{
+  muted=!muted;
+  music.muted=muted;
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+  if(!muted&&current===5&&started&&!paused)music.play().catch(()=>{});
+});
+
+music.addEventListener('ended',()=>{
+  document.querySelector('.finalSub').textContent='❤️ Thank you for being amazing, Uppa ❤️';
+});
+</script>
+</body>
+</html>
